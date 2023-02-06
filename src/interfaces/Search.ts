@@ -8,6 +8,7 @@ import {
 } from "./Superhero";
 
 export interface Search {
+  error?: string;
   response: string;
   "results-for": string;
   results: Result[];

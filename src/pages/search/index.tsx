@@ -7,6 +7,7 @@ import {
   InputLeftElement,
   List,
   ListItem,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -22,16 +23,34 @@ const fetchSuperhero = async (keyword: string): Promise<Search> => {
 
 const SearchPage = () => {
   const [results, setResults] = useState<Result[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
   const onSearch = (value: string) => {
+    setError(undefined);
+    setIsLoading(true);
+
     if (timer) {
       window.clearTimeout(timer);
     }
 
-    timer = setTimeout(async () => {
-      const superHeroResults = await fetchSuperhero(value);
-      setResults(superHeroResults.results);
-    }, 500);
+    if (value) {
+      timer = setTimeout(async () => {
+        const superHeroResults = await fetchSuperhero(value);
+
+        if (superHeroResults.response === "success") {
+          setResults(superHeroResults.results);
+        } else {
+          setResults([]);
+          setError(superHeroResults.error);
+        }
+        setIsLoading(false);
+      }, 500);
+    } else {
+      setError(undefined);
+      setResults([]);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -60,7 +79,18 @@ const SearchPage = () => {
         </Box>
         <Box w="full">
           <List display="flex" alignItems="center" flexDir="column" gap={4}>
-            {results.length > 0 &&
+            {isLoading && <Text>Searching superhero...</Text>}
+
+            {!isLoading && !error && (
+              <Text>Start searching for a superhero.</Text>
+            )}
+
+            {!isLoading && error && results.length === 0 && (
+              <Text>No superheroes found.</Text>
+            )}
+
+            {!isLoading &&
+              results.length > 0 &&
               results.map((result) => (
                 <ListItem key={result.id} w="full">
                   <ResultItem result={result} />
