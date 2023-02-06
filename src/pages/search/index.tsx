@@ -10,7 +10,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { ResultItem } from "../components/ResultItem";
+import { ResultItem } from "../../components/ResultItem";
 
 let timer: NodeJS.Timeout;
 
@@ -35,7 +35,7 @@ const SearchPage = () => {
   };
 
   return (
-    <Container h="100vh" py={12}>
+    <Container minH="100vh" py={12}>
       <VStack gap={8}>
         <Box w="full">
           <InputGroup>
