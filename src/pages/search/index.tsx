@@ -81,7 +81,7 @@ const SearchPage = () => {
           <List display="flex" alignItems="center" flexDir="column" gap={4}>
             {isLoading && <Text>Searching superhero...</Text>}
 
-            {!isLoading && !error && (
+            {!isLoading && !error && results.length === 0 && (
               <Text>Start searching for a superhero.</Text>
             )}
 
