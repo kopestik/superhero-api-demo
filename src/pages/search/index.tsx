@@ -1,3 +1,4 @@
+import { Result, Search } from "@/interfaces/Search";
 import {
   Container,
   Input,
@@ -8,14 +9,14 @@ import { useState } from "react";
 
 let timer: NodeJS.Timeout;
 
-const fetchSuperhero = async (keyword: string) => {
+const fetchSuperhero = async (keyword: string): Promise<Search> => {
   const res = await fetch(`/api/search/?name=${keyword}`);
 
   return res.json();
 };
 
 const SearchPage = () => {
-  const [results, setResults] = useState<any>();
+  const [results, setResults] = useState<Result[]>([]);
 
   const onSearch = (value: string) => {
     if (timer) {
@@ -24,7 +25,7 @@ const SearchPage = () => {
 
     timer = setTimeout(async () => {
       const superHeroResults = await fetchSuperhero(value);
-      setResults(superHeroResults);
+      setResults(superHeroResults.results);
     }, 500);
   };
 
